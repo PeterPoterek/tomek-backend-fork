@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const bCrypt = require("bcryptjs");
 
 const { Schema } = mongoose;
 
@@ -35,14 +35,14 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.methods.setPassword = async function (password) {
-  this.password = await bcrypt.hash(password, 12);
+userSchema.methods.setPassword = function (password) {
+  this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6));
 };
 
-userSchema.methods.validatePassword = async function (password) {
-  return bcrypt.compare(password, this.password);
+userSchema.methods.validPassword = function (password) {
+  return bCrypt.compareSync(password, this.password);
 };
 
-const User = mongoose.model("user", userSchema, "users");
+const User = mongoose.model("user", userSchema);
 
 module.exports = User;
